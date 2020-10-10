@@ -35,7 +35,4 @@ jobs:
           chmod +rx firebase
 
       - name: firebase appdistribution:distribute
-        run: ./firebase appdistribution:distribute {{apkPath}} \
-          --app {{appId}} \
-          --token {{refreshToken}} \
-          --testers {{testers}}
+        run: ./firebase appdistribution:distribute {{apkPath}} --app {{appId}} --token {{refreshToken}} --testers {{testers}}

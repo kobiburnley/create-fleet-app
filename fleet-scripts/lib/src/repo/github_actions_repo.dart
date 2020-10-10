@@ -22,7 +22,7 @@ class GithubActionsRepo {
       'apkPath': apkPath,
       'appId': '"${app.appId}"',
       'testers': '"${testers.join(', ')}"',
-      'refreshToken': '\${{ secrets.FIREBASE_TOKEN }}'
+      'refreshToken': '"\${{ secrets.FIREBASE_TOKEN }}"'
     };
     final text = renderTemplate('.github/workflows/ci.yml', variables);
     writeString(outputPath, text);

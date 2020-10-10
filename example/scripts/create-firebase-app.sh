@@ -1,0 +1,1 @@
+flutter pub run grinder fleet-firebase-app

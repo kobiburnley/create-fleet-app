@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+{{#flutterAppDirectory}}
+    defaults:
+      run:
+        working-directory: example
+
+{{/flutterAppDirectory}}
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: {{flutterVersion}}
+
+      - run: flutter pub get
+      - run: flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+
+      - name: use firebase-cli
+        run: |
+          curl -o firebase -L --progress-bar https://github.com/firebase/firebase-tools/releases/download/v{{firebaseVersion}}/firebase-tools-linux
+          chmod +rx firebase
+
+      - name: firebase appdistribution:distribute
+        run: ./firebase appdistribution:distribute {{apkPath}} \
+          --app {{appId}} \
+          --token {{refreshToken}} \
+          --testers {{testers}}
